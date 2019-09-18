@@ -1,4 +1,4 @@
-<h1>Currency Converter Application</h1>
+<h1>Currency Converter Application Using React JS</h1>
 
 <h3>Technology Stack</h3>
 <ul>
