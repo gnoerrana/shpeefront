@@ -3,47 +3,32 @@
  */
 
 import { createSelector } from 'reselect';
-import { initialState } from './reducer';
 
-const selectGlobal = state => state.global || initialState;
+const selectGlobal = state => state.get('global');
 
-const selectRouter = state => state.router;
-
-const makeSelectCurrentUser = () =>
-  createSelector(
-    selectGlobal,
-    globalState => globalState.currentUser,
+const makeSelectExchangeRateData = () =>
+  createSelector(selectGlobal, globalState =>
+    globalState.getIn(['exchangeRate', 'data']),
   );
 
-const makeSelectLoading = () =>
-  createSelector(
-    selectGlobal,
-    globalState => globalState.loading,
+const makeSelectExchangeRateLoading = () =>
+  createSelector(selectGlobal, globalState =>
+    globalState.getIn(['exchangeRate', 'loading']),
   );
 
-const makeSelectError = () =>
-  createSelector(
-    selectGlobal,
-    globalState => globalState.error,
+const makeSelectExchangeRateLoaded = () =>
+  createSelector(selectGlobal, globalState =>
+    globalState.getIn(['exchangeRate', 'loaded']),
   );
 
-const makeSelectRepos = () =>
-  createSelector(
-    selectGlobal,
-    globalState => globalState.userData.repositories,
-  );
-
-const makeSelectLocation = () =>
-  createSelector(
-    selectRouter,
-    routerState => routerState.location,
+const makeSelectExchangeRateError = () =>
+  createSelector(selectGlobal, globalState =>
+    globalState.getIn(['exchangeRate', 'error']),
   );
 
 export {
-  selectGlobal,
-  makeSelectCurrentUser,
-  makeSelectLoading,
-  makeSelectError,
-  makeSelectRepos,
-  makeSelectLocation,
+  makeSelectExchangeRateData,
+  makeSelectExchangeRateLoading,
+  makeSelectExchangeRateLoaded,
+  makeSelectExchangeRateError,
 };

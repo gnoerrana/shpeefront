@@ -1,14 +1,14 @@
 import React from 'react';
-import ShallowRenderer from 'react-test-renderer/shallow';
-
+import { shallow } from 'enzyme';
+import configureMockStore from 'redux-mock-store';
+import CurrencyPanel from 'components/CurrencyPanel';
 import App from '../index';
 
-const renderer = new ShallowRenderer();
-
+const mockStore = configureMockStore();
 describe('<App />', () => {
-  it('should render and match the snapshot', () => {
-    renderer.render(<App />);
-    const renderedOutput = renderer.getRenderOutput();
-    expect(renderedOutput).toMatchSnapshot();
+  it('should render the Currency Panel', () => {
+    const store = mockStore({});
+    const renderedComponent = shallow(<App store={store} />).dive();
+    expect(renderedComponent.find(CurrencyPanel)).toHaveLength(1);
   });
 });

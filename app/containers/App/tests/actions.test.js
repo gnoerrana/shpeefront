@@ -1,43 +1,46 @@
-import { LOAD_REPOS, LOAD_REPOS_SUCCESS, LOAD_REPOS_ERROR } from '../constants';
-
-import { loadRepos, reposLoaded, repoLoadingError } from '../actions';
+import {
+  LOAD_EXCHANGE_RATE_ERROR,
+  LOAD_EXCHANGE_RATE,
+  LOAD_EXCHANGE_RATE_LOADED,
+} from '../constants';
+import {
+  exchangeRateLoadingError,
+  exchangeRateLoaded,
+  loadExchangeRate,
+} from '../actions';
 
 describe('App Actions', () => {
-  describe('loadRepos', () => {
-    it('should return the correct type', () => {
+  describe('loadExchangeRate', () => {
+    it('should return the exchange rate from the provided api', () => {
+      const query = { base: 'usd' };
       const expectedResult = {
-        type: LOAD_REPOS,
+        type: LOAD_EXCHANGE_RATE,
+        query,
       };
 
-      expect(loadRepos()).toEqual(expectedResult);
+      expect(loadExchangeRate(query)).toEqual(expectedResult);
     });
   });
 
-  describe('reposLoaded', () => {
-    it('should return the correct type and the passed repos', () => {
-      const fixture = ['Test'];
-      const username = 'test';
+  describe('exchangeRateLoaded', () => {
+    it('return true if LOAD_EXCHANGE_RATE successfully executed', () => {
+      const response = true;
       const expectedResult = {
-        type: LOAD_REPOS_SUCCESS,
-        repos: fixture,
-        username,
+        type: LOAD_EXCHANGE_RATE_LOADED,
+        response,
       };
-
-      expect(reposLoaded(fixture, username)).toEqual(expectedResult);
+      expect(exchangeRateLoaded(response)).toEqual(expectedResult);
     });
   });
 
-  describe('repoLoadingError', () => {
-    it('should return the correct type and the error', () => {
-      const fixture = {
-        msg: 'Something went wrong!',
-      };
+  describe('exchangeRateLoadingError', () => {
+    it('return error if LOAD_EXCHANGE_RATE fail to be executed or return error', () => {
+      const error = 'err';
       const expectedResult = {
-        type: LOAD_REPOS_ERROR,
-        error: fixture,
+        type: LOAD_EXCHANGE_RATE_ERROR,
+        error,
       };
-
-      expect(repoLoadingError(fixture)).toEqual(expectedResult);
+      expect(exchangeRateLoadingError(error)).toEqual(expectedResult);
     });
   });
 });

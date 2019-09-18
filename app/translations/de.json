@@ -2,5 +2,5 @@
   "general.submit": "Einreichen",
   "general.date": "Datum",
   "general.loading": "Laden...",
-  "general.please.select.currency": "Bitte wähle die Währung"
+  "general.currencypick": "Bitte wähle die Währung"
 }

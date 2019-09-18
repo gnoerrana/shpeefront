@@ -1,65 +1,83 @@
-import produce from 'immer';
+import { fromJS } from 'immutable';
+import AppReducer from '../reducer';
+import {
+  loadExchangeRate,
+  exchangeRateLoaded,
+  exchangeRateLoadingError,
+} from '../actions';
 
-import appReducer from '../reducer';
-import { loadRepos, reposLoaded, repoLoadingError } from '../actions';
-
-/* eslint-disable default-case, no-param-reassign */
-describe('appReducer', () => {
+describe('AppReducer', () => {
   let state;
   beforeEach(() => {
-    state = {
-      loading: false,
-      error: false,
-      currentUser: false,
-      userData: {
-        repositories: false,
+    state = fromJS({
+      exchangeRate: {
+        data: {},
+        loading: false,
+        loaded: false,
+        error: false,
       },
-    };
+    });
   });
 
   it('should return the initial state', () => {
     const expectedResult = state;
-    expect(appReducer(undefined, {})).toEqual(expectedResult);
+    expect(AppReducer(undefined, {})).toEqual(expectedResult);
   });
 
-  it('should handle the loadRepos action correctly', () => {
-    const expectedResult = produce(state, draft => {
-      draft.loading = true;
-      draft.error = false;
-      draft.userData.repositories = false;
-    });
+  it('should handle the loadExchangeRate action correctly', () => {
+    const query = { base: 'usd' };
+    const expectedResult = state
+      .setIn(['exchangeRate', 'loading'], true)
+      .setIn(['exchangeRate', 'loaded'], false)
+      .setIn(['exchangeRate', 'error'], false);
 
-    expect(appReducer(state, loadRepos())).toEqual(expectedResult);
+    expect(AppReducer(state, loadExchangeRate(query))).toEqual(expectedResult);
   });
 
-  it('should handle the reposLoaded action correctly', () => {
-    const fixture = [
-      {
-        name: 'My Repo',
+  it('should handle the exchangeRateLoaded action correctly', () => {
+    const response = {
+      date: '2018-11-19',
+      rates: {
+        BGN: 1.9558,
       },
-    ];
-    const username = 'test';
-    const expectedResult = produce(state, draft => {
-      draft.userData.repositories = fixture;
-      draft.loading = false;
-      draft.currentUser = username;
-    });
+      base: 'EUR',
+    };
+    let currencyList = [];
+    if (response.rates) {
+      Object.keys(response.rates).map(item => {
+        currencyList = [
+          ...currencyList,
+          {
+            text: item,
+            value: item,
+          },
+        ];
+        return true;
+      });
+    }
+    const newResponse = {
+      ...response,
+      currencyList,
+    };
+    const expectedResult = state
+      .setIn(['exchangeRate', 'data'], newResponse)
+      .setIn(['exchangeRate', 'loading'], false)
+      .setIn(['exchangeRate', 'loaded'], true)
+      .setIn(['exchangeRate', 'error'], false);
 
-    expect(appReducer(state, reposLoaded(fixture, username))).toEqual(
+    expect(AppReducer(state, exchangeRateLoaded(response))).toEqual(
       expectedResult,
     );
   });
 
-  it('should handle the repoLoadingError action correctly', () => {
-    const fixture = {
-      msg: 'Not found',
-    };
-    const expectedResult = produce(state, draft => {
-      draft.error = fixture;
-      draft.loading = false;
-    });
+  it('should handle the exchangeRateLoadingError action correctly', () => {
+    const error = 'err';
+    const expectedResult = state
+      .setIn(['exchangeRate', 'loaded'], false)
+      .setIn(['exchangeRate', 'loading'], false)
+      .setIn(['exchangeRate', 'error'], error);
 
-    expect(appReducer(state, repoLoadingError(fixture))).toEqual(
+    expect(AppReducer(state, exchangeRateLoadingError(error))).toEqual(
       expectedResult,
     );
   });

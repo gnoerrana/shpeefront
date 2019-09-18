@@ -2,5 +2,8 @@
   "general.submit": "Submit",
   "general.date": "Date",
   "general.loading": "Loading...",
-  "general.please.select.currency": "Please select currency"
+  "general.currencypick": "Choose coverted currency",
+  "general.currency.label.choose": "Choose base currency",
+  "general.converter.title": "Currency Converter",
+  "general.add.currency": "Add New Currency"
 }

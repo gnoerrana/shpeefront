@@ -1,10 +1,29 @@
-/**
- * Parses the JSON returned by a network request
- *
- * @param  {object} response A response from a network request
- *
- * @return {object}          The parsed JSON from the request
- */
+import { stringify as queryStringify } from 'query-string';
+
+export function postBasic(url, jsonData) {
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(jsonData),
+  };
+  return fetch(url, options)
+    .then(checkStatus)
+    .then(response => parseJSON(response));
+}
+
+export function getBasic(url, query) {
+  const parsedQuery = query ? queryStringify(query) : '';
+  const parsedUrl = `${url}?${parsedQuery}`;
+  const options = {
+    method: 'GET',
+  };
+  return fetch(parsedUrl, options)
+    .then(checkStatus)
+    .then(response => parseJSON(response));
+}
+
 function parseJSON(response) {
   if (response.status === 204 || response.status === 205) {
     return null;
@@ -37,7 +56,7 @@ function checkStatus(response) {
  *
  * @return {object}           The response data
  */
-export default function request(url, options) {
+export function request(url, options) {
   return fetch(url, options)
     .then(checkStatus)
     .then(parseJSON);

@@ -5,7 +5,8 @@ const GlobalStyle = createGlobalStyle`
   body {
     height: 100%;
     width: 100%;
-    line-height: 1.5;
+    -ms-overflow-style: none;  // IE 10+
+    overflow: -moz-scrollbars-none;  // Firefox
   }
 
   body {
@@ -17,7 +18,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #app {
-    background-color: #fafafa;
+    background-color: #fff;
     min-height: 100%;
     min-width: 100%;
   }
@@ -26,6 +27,23 @@ const GlobalStyle = createGlobalStyle`
   label {
     font-family: Georgia, Times, 'Times New Roman', serif;
     line-height: 1.5em;
+  }
+  
+  ::-webkit-scrollbar {
+    display: none; // chrome
+  }
+  .show, [data-status="show"] {
+    display: block;
+  }
+
+  .hide, [data-status="hide"], [data-overide="hideAddCurr"]  {
+    display: none!important;
+  }
+  [data-overide="showInputCurr"] {
+    display: -webkit-box!important;
+    display: -webkit-flex!important;
+    display: -ms-flexbox!important;
+    display: flex!important;
   }
 `;
 
